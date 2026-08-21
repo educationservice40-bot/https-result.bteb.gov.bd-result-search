@@ -1,5 +1,10 @@
-/// <reference types="vitest" />
-import { defineConfig } from 'vite'
+// `defineConfig` comes from vitest/config, not vite: it is vite's own, widened
+// to accept the `test` block below. Up to vitest 3 a `/// <reference
+// types="vitest" />` triple-slash directive augmented vite's `UserConfig`
+// globally and importing from 'vite' was enough; vitest 4 dropped that
+// augmentation, so the directive left `test` an unknown property and only the
+// type-check caught it — the tests themselves ran either way.
+import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 
 // The board's public API sets permissive CORS headers, so the browser can call
