@@ -66,8 +66,31 @@ body {
   border-bottom: 2px solid var(--green);
 }
 
+/* One square box for both marks, and each contained inside it.
+
+   The two are not the same shape — the board's is taller than it is wide, the
+   national emblem is square — and matching them on height alone leaves the
+   board's mark visibly the smaller of the pair, because its disc sits inset
+   within a ring of rays. A fixed box with object-fit:contain gives them a
+   common footprint and lets each fill as much of it as its own proportions
+   allow. flex:none keeps the box from being squeezed when the title between
+   them runs long. */
 .masthead-mark {
+  --mark: 72px;
+  flex: none;
   display: flex;
+}
+
+/* The size goes on the image in real pixels, not as a percentage of the box.
+   A percentage height on a grid item does not resolve against the grid area in
+   Chromium — neither `height:100%` nor `max-height:100%` — so the marks fell
+   back to their intrinsic aspect ratio and overflowed. One custom property
+   drives both axes, and the breakpoints below change only that. */
+.masthead-mark img {
+  display: block;
+  width: var(--mark);
+  height: var(--mark);
+  object-fit: contain;
 }
 
 .masthead-titles {
@@ -110,9 +133,8 @@ body {
     gap: 10px;
     padding: 16px 12px 12px;
   }
-  .masthead-mark svg {
-    width: 34px;
-    height: 34px;
+  .masthead-mark {
+    --mark: 50px;
   }
   .masthead-address {
     display: none;
