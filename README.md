@@ -13,6 +13,8 @@ lookup there.
 
 ## Running it
 
+Node ^20.19 or >=22.12, which is what Vite 8 requires.
+
 ```bash
 npm install
 npm run dev        # http://localhost:5173/result-search
