@@ -430,9 +430,8 @@
     gap: 10px;
     border-bottom-width: 1.5px;
   }
-  .masthead svg {
-    width: 34px;
-    height: 34px;
+  .masthead-mark {
+    --mark: 50px;
   }
   .doc-head {
     padding: 8px 12px 7px;

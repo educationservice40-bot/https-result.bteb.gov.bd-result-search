@@ -104,6 +104,8 @@ The logic that is worth testing is kept out of the components: `constants.ts`,
 
 ## Notes
 
-The marks in the masthead are neutral placeholders. The board's own emblems are
-not redistributed here; drop the real assets in `public/` and point the
-`Masthead` component at them for a deployment that represents the board.
+The masthead carries the board's own mark and the national emblem, served from
+`public/bteb_mark.png` and `public/govt_seal.png` at the same root paths the
+board serves them from. They are the board's marks, not this project's: this is
+the board's result portal, and the app should not be deployed anywhere it could
+be mistaken for the official one.
