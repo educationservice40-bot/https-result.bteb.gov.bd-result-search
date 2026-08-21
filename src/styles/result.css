@@ -1,0 +1,490 @@
+/* The transcript. Everything here is sized so the sheet prints as one A4 page
+   with the toolbar dropped. */
+
+.doc-head {
+  padding: 18px 22px 14px;
+  text-align: center;
+  background: var(--wash);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.doc-eyebrow {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.doc-exam {
+  margin: 6px 0 0;
+  font-family: var(--serif);
+  font-size: clamp(1.05rem, 3vw, 1.35rem);
+  font-weight: 600;
+  color: var(--green-dark);
+}
+
+.doc-section {
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.doc-section-title {
+  margin: 0 0 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--green);
+}
+
+@media (max-width: 600px) {
+  .doc-section,
+  .doc-head {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}
+
+/* Identity ---------------------------------------------------------------- */
+
+/* Two label/value pairs per line on a wide screen, one on a narrow one. The
+   dt/dd order in the markup is column-major so the pairs read down the page in
+   the order the board prints them. */
+.identity {
+  display: grid;
+  grid-template-columns: max-content 1fr max-content 1fr;
+  gap: 6px 12px;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.identity dt {
+  color: var(--ink-soft);
+}
+
+.identity dd {
+  margin: 0;
+  font-weight: 500;
+}
+
+.identity-wide {
+  grid-column: 2 / -1;
+}
+
+@media (max-width: 700px) {
+  .identity {
+    grid-template-columns: max-content 1fr;
+  }
+  .identity-wide {
+    grid-column: 2 / -1;
+  }
+}
+
+.mono {
+  font-family: var(--mono);
+  letter-spacing: 0.02em;
+}
+
+.strong {
+  font-weight: 600;
+}
+
+.status-pass {
+  font-weight: 700;
+  color: var(--green);
+  text-transform: uppercase;
+}
+
+.status-fail {
+  font-weight: 700;
+  color: var(--red);
+  text-transform: uppercase;
+}
+
+/* Grade sheet ------------------------------------------------------------- */
+
+.grades {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* One grid template drives the head and every row, so the columns cannot drift
+   apart. Which columns exist depends on the publication: marks are only
+   released for some, credit hours only for the diploma ladder. */
+.grade-row {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr 5.5rem;
+  align-items: center;
+  font-size: 0.88rem;
+  border-top: 1px solid var(--line-soft);
+}
+
+.grade-row--marks {
+  grid-template-columns: 7.5rem 1fr 5rem 6.5rem 5.5rem;
+}
+
+.grade-row--credit {
+  grid-template-columns: 7.5rem 1fr 5.5rem 5.5rem 5.5rem;
+}
+
+.grade-row--marks.grade-row--credit {
+  grid-template-columns: 7rem 1fr 4.5rem 6rem 5rem 5rem 5rem;
+}
+
+.grade-row > div {
+  padding: 8px 10px;
+}
+
+.grade-head {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  background: var(--wash);
+  border-top: 0;
+}
+
+.grade-body .grade-row:first-child {
+  border-top: 1px solid var(--line-soft);
+}
+
+.grade-code {
+  font-family: var(--mono);
+  font-size: 0.84rem;
+}
+
+.grade-subject {
+  min-width: 0;
+}
+
+.grade-num {
+  font-family: var(--mono);
+  font-size: 0.84rem;
+  text-align: center;
+}
+
+.grade-letter {
+  font-weight: 700;
+  text-align: center;
+}
+
+.grade-empty {
+  grid-column: 1 / -1;
+  padding: 11px 13px;
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+.grade-divider {
+  padding: 7px 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  background: var(--wash);
+  border-top: 1px solid var(--line-soft);
+}
+
+.grade-gpa {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 9px 12px;
+  background: var(--wash);
+  border-top: 1px solid var(--line);
+}
+
+.grade-gpa-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.grade-gpa-value {
+  font-family: var(--mono);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--green-dark);
+}
+
+.grade-gpa--final .grade-gpa-value {
+  font-size: 1.15rem;
+}
+
+@media (max-width: 600px) {
+  /* The row grids do not survive a phone: seven columns in 390px leaves each
+     one too narrow to read. Each subject becomes a small block instead, and
+     every value is captioned from its own data-label — the head row is hidden,
+     so nothing else says which number is which. */
+  .grade-head {
+    display: none;
+  }
+  /* `.grades .grade-row`, not `.grade-row`: the desktop templates are written
+     as `.grade-row--marks.grade-row--credit`, two classes, and a single-class
+     rule here loses to them however late it comes. The seven-column template
+     survived into the phone layout and pushed the last cell off the sheet. */
+  .grades .grade-row {
+    grid-template-columns: 1fr 1fr;
+    padding-bottom: 6px;
+  }
+  .grade-row > div {
+    padding: 4px 10px;
+  }
+  .grade-code {
+    grid-column: 1 / -1;
+    padding-top: 8px;
+    padding-bottom: 0;
+  }
+  .grade-subject {
+    grid-column: 1 / -1;
+    padding-bottom: 4px;
+    font-weight: 600;
+  }
+  .grade-num,
+  .grade-letter {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    text-align: left;
+  }
+  .grade-num::before,
+  .grade-letter::before {
+    content: attr(data-label);
+    font-family: var(--sans);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .grade-empty {
+    padding: 11px 13px;
+  }
+}
+
+/* Semester ladder --------------------------------------------------------- */
+
+.summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 14px;
+}
+
+.ladder {
+  flex: 1 1 320px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ladder-row {
+  display: grid;
+  grid-template-columns: repeat(var(--rungs), 1fr);
+}
+
+.ladder-row > div {
+  padding: 7px 4px;
+  text-align: center;
+}
+
+.ladder-head {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  background: var(--wash);
+}
+
+.ladder-values > div {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  border-top: 1px solid var(--line-soft);
+}
+
+.cgpa {
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 10px 22px;
+  background: var(--wash);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.cgpa-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.cgpa-value {
+  font-family: var(--mono);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--green-dark);
+}
+
+.cgpa-value small {
+  margin-left: 4px;
+  font-size: 0.7rem;
+  color: var(--ink-soft);
+}
+
+/* Foot and toolbar -------------------------------------------------------- */
+
+.doc-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 12px 22px 14px;
+  font-size: 0.74rem;
+  color: var(--ink-soft);
+}
+
+.doc-foot p {
+  margin: 0;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 16px 30px;
+}
+
+.toolbar-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--green);
+  border: 1px solid var(--green);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.toolbar-button:hover {
+  background: var(--green-dark);
+}
+
+.toolbar-button--ghost {
+  color: var(--green-dark);
+  background: #fff;
+}
+
+.toolbar-button--ghost:hover {
+  background: var(--wash);
+}
+
+/* Print ------------------------------------------------------------------- */
+
+@page {
+  size: A4 portrait;
+  margin: 12mm;
+}
+
+@media print {
+  /* One sheet of paper.
+
+     A transcript that runs onto a second page puts a footer scrap and nothing
+     else on it, and a student printing at a shop pays for both. The screen
+     spacing is generous on purpose; on paper it is all cut back — smaller
+     type, tighter rows, no page chrome — which brings a full eight-semester
+     diploma sheet, the longest of them, inside a single A4 page. */
+  body {
+    font-size: 9.5pt;
+    line-height: 1.4;
+  }
+  .page {
+    min-height: 0;
+  }
+  .sheet--doc {
+    max-width: none;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+  }
+  .masthead {
+    max-width: none;
+    padding: 0 0 8px;
+    gap: 10px;
+    border-bottom-width: 1.5px;
+  }
+  .masthead svg {
+    width: 34px;
+    height: 34px;
+  }
+  .doc-head {
+    padding: 8px 12px 7px;
+  }
+  .doc-section {
+    padding: 10px 12px;
+  }
+  .doc-section-title {
+    margin-bottom: 7px;
+  }
+  .identity {
+    gap: 3px 12px;
+  }
+  .grade-row > div {
+    padding: 3.5px 9px;
+  }
+  .grade-gpa {
+    padding: 5px 10px;
+  }
+  .grade-divider {
+    padding: 4px 10px;
+  }
+  .ladder-row > div {
+    padding: 4px 4px;
+  }
+  .cgpa {
+    padding: 6px 18px;
+  }
+  .cgpa-value {
+    font-size: 1.25rem;
+  }
+  .doc-foot {
+    padding: 8px 12px 0;
+  }
+  .doc-head,
+  .grade-head,
+  .grade-gpa,
+  .grade-divider,
+  .ladder-head,
+  .cgpa,
+  .sheet-head {
+    /* Backgrounds are what separate the head rows from the body on paper. */
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .doc-section {
+    break-inside: avoid;
+  }
+  .grade-row {
+    break-inside: avoid;
+  }
+  a[href]::after {
+    content: none !important;
+  }
+}
