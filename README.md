@@ -37,10 +37,21 @@ npm run typecheck
 
 `dist/` is a static bundle. Serve it behind a reverse proxy that forwards
 `/api/public` to the board, and rewrite unknown paths to `index.html` so
-`/result-search/result` resolves on a hard refresh. Without a proxy in front,
-set `VITE_API_BASE=https://result.bteb.gov.bd/api/public` at build time — the
-board's API does send permissive CORS headers — but a proxy is the better
-default, since it keeps the origin single and the API base out of the bundle.
+`/result-search/result` resolves on a hard refresh.
+
+The proxy is required, not a convenience. The board screens the `Origin` header
+on writes: `POST /result` is answered for its own origin and for
+`http://localhost:5173`, and anything else gets a bare
+`403 Invalid CORS request`. Reads are lenient, so a misconfigured deployment
+looks healthy — the catalogue and the security check load — and then fails only
+when someone actually searches. `VITE_API_BASE` therefore cannot replace the
+proxy for a browser deployment, since the browser sets `Origin` itself and will
+not be talked out of it; it remains useful for pointing a proxied build at a
+different upstream.
+
+The proxy must also present the upstream's own `Origin` rather than forwarding
+the browser's — see `vite.config.ts`, which does exactly this for `npm run dev`
+and `npm run preview`.
 
 ## The two pages
 
