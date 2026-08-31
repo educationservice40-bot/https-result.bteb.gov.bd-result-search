@@ -4,8 +4,9 @@ export const SEARCH_PATH = '/result-search'
 export const RESULT_PATH = '/result-search/result'
 
 /**
- * A two-page app does not need a routing library. This tracks
- * `location.pathname` and pushes to it, which is all the navigation there is.
+ * No routing library. This tracks `location.pathname` and pushes to it, which
+ * is all the navigation there is — the pages themselves are decided by
+ * the two predicates below and by `src/site/routes.ts`.
  */
 export function usePath(): [string, (path: string, replace?: boolean) => void] {
   const [path, setPath] = useState(() => window.location.pathname)
@@ -25,6 +26,14 @@ export function usePath(): [string, (path: string, replace?: boolean) => void] {
   return [path, navigate]
 }
 
+function trimmed(path: string): string {
+  return path.replace(/\/+$/, '')
+}
+
 export function isResultPath(path: string): boolean {
-  return path.replace(/\/+$/, '') === RESULT_PATH
+  return trimmed(path) === RESULT_PATH
+}
+
+export function isSearchPath(path: string): boolean {
+  return trimmed(path) === SEARCH_PATH
 }

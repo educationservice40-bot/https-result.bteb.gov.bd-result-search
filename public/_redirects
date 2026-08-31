@@ -1,0 +1,8 @@
+# Netlify / Cloudflare Pages redirect rules. Other hosts ignore this file.
+#
+# There is no SPA catch-all here on purpose: every public page is prerendered to
+# its own index.html by scripts/prerender.mjs, so the host serves real files and
+# unknown paths fall through to 404.html, which is also prerendered.
+#
+# The result portal needs the board's API reachable at a same-origin path.
+/api/public/*  https://result.bteb.gov.bd/api/public/:splat  200
