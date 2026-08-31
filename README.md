@@ -91,11 +91,49 @@ Netlify, Cloudflare Pages, Vercel and GitHub Pages.
 
 The one thing that does need configuring is the result portal's API. It calls a
 same-origin `/api/public`, which must be forwarded to
-`https://result.bteb.gov.bd`. [`public/_redirects`](public/_redirects) does this
-on Netlify and Cloudflare Pages; on other hosts add the equivalent proxy rule.
-Without a proxy, build with `VITE_API_BASE=https://result.bteb.gov.bd/api/public`
-— the board's API does send permissive CORS headers — but a proxy is the better
-default, since it keeps the origin single.
+`https://result.bteb.gov.bd` — and the proxy has to rewrite one header.
+
+### The Origin header
+
+**The board answers `POST /result` with a bare 403 unless the request's `Origin`
+is `https://result.bteb.gov.bd`.** No CORS message, no body — just 403. Browsers
+send `Origin` on every same-origin POST (they omit it only for GET and HEAD), so
+a proxy that forwards it verbatim breaks every lookup while leaving the three
+GET endpoints working. The symptom is a portal that loads its curricula and its
+security check perfectly and then answers every search with "the result could
+not be retrieved".
+
+`vite.config.ts` sets the header for `npm run dev` and `npm run preview`.
+Whatever proxies `/api/public` in production must do the same:
+
+```nginx
+location /api/public/ {
+    proxy_pass https://result.bteb.gov.bd/api/public/;
+    proxy_set_header Host   result.bteb.gov.bd;
+    proxy_set_header Origin https://result.bteb.gov.bd;
+}
+```
+
+```caddy
+handle /api/public/* {
+    reverse_proxy https://result.bteb.gov.bd {
+        header_up Host   result.bteb.gov.bd
+        header_up Origin https://result.bteb.gov.bd
+    }
+}
+```
+
+A Netlify or Cloudflare Pages *redirect* rule cannot set an outgoing request
+header, so the rule in [`public/_redirects`](public/_redirects) gets the GETs
+through but not the lookup. On those hosts the portal needs a function or worker
+in front of the board that rewrites `Origin`. The website itself is unaffected
+either way — it is static files and calls nothing.
+
+For the same reason, building with
+`VITE_API_BASE=https://result.bteb.gov.bd/api/public` and skipping the proxy
+does not work for the lookup: the browser would send your site's own origin and
+be refused. The GETs would succeed, which is what makes this failure look like a
+bug in the search rather than in the deployment.
 
 ## How the prerendering works
 

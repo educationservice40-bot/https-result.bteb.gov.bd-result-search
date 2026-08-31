@@ -4,5 +4,9 @@
 # its own index.html by scripts/prerender.mjs, so the host serves real files and
 # unknown paths fall through to 404.html, which is also prerendered.
 #
-# The result portal needs the board's API reachable at a same-origin path.
+# The result portal needs the board's API reachable at a same-origin path. This
+# rule gets the three GET endpoints through, but NOT the lookup: the board
+# answers POST /result with 403 unless the request's Origin is its own, and a
+# redirect rule cannot set an outgoing request header. Put a function or worker
+# in front of the board on these hosts — see "The Origin header" in the README.
 /api/public/*  https://result.bteb.gov.bd/api/public/:splat  200
