@@ -1,18 +1,19 @@
 {
-  "name": "bteb-result-search",
+  "name": "education-service-site",
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Result search portal for the Bangladesh Technical Education Board",
+  "description": "Service website for academic document support, with the BTEB result search portal hosted alongside it",
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && npm run build:ssr && node scripts/prerender.mjs",
     "preview": "vite preview",
     "typecheck": "tsc -b --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "build:ssr": "vite build --ssr src/entry-server.tsx --outDir dist-ssr --emptyOutDir"
   },
   "dependencies": {
     "react": "^18.3.1",
